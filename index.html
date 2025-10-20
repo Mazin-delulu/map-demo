@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <title>Bản đồ sinh vật biển Việt Nam (Demo)</title>
+  <meta charset="UTF-8">
+  <title>Bản đồ sinh vật biển Việt Nam (Demo có ảnh & JSON)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS & JS -->
@@ -11,96 +11,98 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f6f8fa;
+      font-family: Arial, sans-serif;
+      background: #f7f9fb;
     }
     header {
-      text-align: center;
-      padding: 1rem;
       background: #0077b6;
       color: white;
-    }
-    #controls {
-      display: flex;
-      justify-content: center;
-      padding: 10px;
-      gap: 10px;
-      background: #e0f2fe;
-    }
-    select {
-      padding: 5px 10px;
-      font-size: 14px;
-      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
     }
     #map {
       height: 600px;
       width: 100%;
     }
+    .popup-container {
+      width: 320px;
+      font-size: 14px;
+      color: #222;
+    }
+    .popup-top {
+      display: flex;
+      gap: 10px;
+    }
+    .popup-top img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .popup-details b {
+      color: #0077b6;
+    }
+    .popup-desc {
+      margin-top: 8px;
+      font-style: italic;
+      background: #eef6fb;
+      padding: 6px;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h2>Bản đồ sinh vật biển Việt Nam (Demo)</h2>
+    <h2>Bản đồ sinh vật biển Việt Nam (Demo có hình minh họa & JSON)</h2>
   </header>
-
-  <div id="controls">
-    <label for="speciesFilter"><b>Lọc theo loài:</b></label>
-    <select id="speciesFilter">
-      <option value="all">Tất cả</option>
-      <option value="Cyanobacteria">Cyanobacteria</option>
-      <option value="Dinoflagellate">Dinoflagellate</option>
-      <option value="Diatom">Diatom</option>
-    </select>
-  </div>
 
   <div id="map"></div>
 
   <script>
-    const map = L.map('map').setView([10.7769, 106.7009], 11);
+    // 1️⃣ Khởi tạo bản đồ - trung tâm TP.HCM
+    const map = L.map('map').setView([10.7769, 106.7009], 12);
+
+    // 2️⃣ Giới hạn bản đồ trong Việt Nam
+    const bounds = L.latLngBounds([8.18, 102.14], [23.39, 109.46]);
+    map.setMaxBounds(bounds);
+    map.on('drag', () => map.panInsideBounds(bounds, { animate: false }));
+
+    // 3️⃣ Nền bản đồ
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    let allMarkers = [];
+    // 4️⃣ Tải dữ liệu từ file JSON
+    fetch('data_demo.json')
+      .then(response => response.json())
+      .then(data => {
+        data.locations.forEach(loc => {
+          const lat = loc.coords[0].toFixed(4);
+          const lng = loc.coords[1].toFixed(4);
 
-    function loadData(speciesFilter = 'all') {
-      fetch('data.json')
-        .then(res => res.json())
-        .then(data => {
-          // Xóa marker cũ
-          allMarkers.forEach(m => map.removeLayer(m));
-          allMarkers = [];
+          const popupHTML = `
+            <div class="popup-container">
+              <div class="popup-top">
+                <img src="${loc.image}" alt="Ảnh loài">
+                <div class="popup-details">
+                  <b>${loc.species}</b><br>
+                  📍 <b>Khu vực:</b> ${loc.region}<br>
+                  🧭 <b>Tọa độ:</b> ${lat}, ${lng}<br>
+                  🧫 <b>Địa điểm:</b> ${loc.name}
+                </div>
+              </div>
+              <div class="popup-desc">
+                <b>Đặc điểm loài:</b> ${loc.description}
+              </div>
+            </div>
+          `;
 
-          // Lọc dữ liệu
-          const filtered = data.features.filter(f =>
-            speciesFilter === 'all' || f.properties.species === speciesFilter
-          );
-
-          // Hiển thị marker mới
-          filtered.forEach(f => {
-            const [lng, lat] = f.geometry.coordinates;
-            const marker = L.marker([lat, lng]).addTo(map);
-            marker.bindPopup(`
-              <b>${f.properties.name}</b><br>
-              <i>${f.properties.species}</i><br>
-              <small>${f.properties.region}</small><br><br>
-              ${f.properties.description}
-            `);
-            allMarkers.push(marker);
-          });
+          L.marker(loc.coords).addTo(map).bindPopup(popupHTML);
         });
-    }
-
-    // Gọi lần đầu
-    loadData();
-
-    // Lọc khi thay đổi loài
-    document.getElementById('speciesFilter').addEventListener('change', e => {
-      loadData(e.target.value);
-    });
+      })
+      .catch(error => console.error("Lỗi tải dữ liệu:", error));
   </script>
 </body>
 </html>
