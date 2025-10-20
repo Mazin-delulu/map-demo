@@ -1,44 +1,28 @@
 {
-  "type": "FeatureCollection",
-  "features": [
+  "locations": [
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Trichodesmium erythraeum",
-        "description": "Thực vật phù du lam, sống nổi ở vùng biển nhiệt đới, đóng vai trò quan trọng trong chu trình nitơ.",
-        "species": "Cyanobacteria",
-        "region": "Biển Đông"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [109.19, 12.25]
-      }
+      "name": "Sân bay Tân Sơn Nhất",
+      "coords": [10.8188, 106.6518],
+      "region": "TP.HCM",
+      "image": "https://drive.google.com/uc?id=1AbCdEfGhIJkLmnOpQR",
+      "species": "Trichodesmium erythraeum",
+      "description": "Loài tảo lam nổi, thường tạo thành vệt đỏ cam khi nở hoa ở vùng nước ấm."
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Noctiluca scintillans",
-        "description": "Sinh vật phát quang ban đêm, thường gặp ở vùng biển miền Trung.",
-        "species": "Dinoflagellate",
-        "region": "Miền Trung"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [108.20, 16.05]
-      }
+      "name": "Bệnh viện Chợ Rẫy",
+      "coords": [10.7554, 106.6620],
+      "region": "TP.HCM",
+      "image": "https://drive.google.com/uc?id=1BcDeFgHiJKLmNoPqRs",
+      "species": "Noctiluca scintillans",
+      "description": "Sinh vật phù du phát sáng về đêm, thường gặp ở khu vực biển gần bờ."
     },
     {
-      "type": "Feature",
-      "properties": {
-        "name": "Chaetoceros curvisetus",
-        "description": "Loài tảo silic phổ biến trong vùng nước ven bờ.",
-        "species": "Diatom",
-        "region": "Nam Bộ"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [106.7, 9.8]
-      }
+      "name": "Khu đô thị Sala",
+      "coords": [10.7765, 106.7330],
+      "region": "TP.HCM",
+      "image": "https://drive.google.com/uc?id=1XyZaBcDeFGhIjKlMnO",
+      "species": "Chaetoceros curvisetus",
+      "description": "Loài tảo silic có dạng chuỗi, góp phần quan trọng trong quang hợp biển."
     }
   ]
 }
