@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Trichodesmium erythraeum",
+        "description": "Thực vật phù du lam, sống nổi ở vùng biển nhiệt đới, đóng vai trò quan trọng trong chu trình nitơ.",
+        "species": "Cyanobacteria",
+        "region": "Biển Đông"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [109.19, 12.25]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Noctiluca scintillans",
+        "description": "Sinh vật phát quang ban đêm, thường gặp ở vùng biển miền Trung.",
+        "species": "Dinoflagellate",
+        "region": "Miền Trung"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [108.20, 16.05]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chaetoceros curvisetus",
+        "description": "Loài tảo silic phổ biến trong vùng nước ven bờ.",
+        "species": "Diatom",
+        "region": "Nam Bộ"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [106.7, 9.8]
+      }
+    }
+  ]
+}

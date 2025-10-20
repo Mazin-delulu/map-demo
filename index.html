@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Bản đồ sinh vật biển Việt Nam (Demo)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f6f8fa;
+    }
+    header {
+      text-align: center;
+      padding: 1rem;
+      background: #0077b6;
+      color: white;
+    }
+    #controls {
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+      gap: 10px;
+      background: #e0f2fe;
+    }
+    select {
+      padding: 5px 10px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Bản đồ sinh vật biển Việt Nam (Demo)</h2>
+  </header>
+
+  <div id="controls">
+    <label for="speciesFilter"><b>Lọc theo loài:</b></label>
+    <select id="speciesFilter">
+      <option value="all">Tất cả</option>
+      <option value="Cyanobacteria">Cyanobacteria</option>
+      <option value="Dinoflagellate">Dinoflagellate</option>
+      <option value="Diatom">Diatom</option>
+    </select>
+  </div>
+
+  <div id="map"></div>
+
+  <script>
+    const map = L.map('map').setView([15.9, 108.2], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let allMarkers = [];
+
+    function loadData(speciesFilter = 'all') {
+      fetch('data.json')
+        .then(res => res.json())
+        .then(data => {
+          // Xóa marker cũ
+          allMarkers.forEach(m => map.removeLayer(m));
+          allMarkers = [];
+
+          // Lọc dữ liệu
+          const filtered = data.features.filter(f =>
+            speciesFilter === 'all' || f.properties.species === speciesFilter
+          );
+
+          // Hiển thị marker mới
+          filtered.forEach(f => {
+            const [lng, lat] = f.geometry.coordinates;
+            const marker = L.marker([lat, lng]).addTo(map);
+            marker.bindPopup(`
+              <b>${f.properties.name}</b><br>
+              <i>${f.properties.species}</i><br>
+              <small>${f.properties.region}</small><br><br>
+              ${f.properties.description}
+            `);
+            allMarkers.push(marker);
+          });
+        });
+    }
+
+    // Gọi lần đầu
+    loadData();
+
+    // Lọc khi thay đổi loài
+    document.getElementById('speciesFilter').addEventListener('change', e => {
+      loadData(e.target.value);
+    });
+  </script>
+</body>
+</html>
